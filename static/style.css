@@ -2,3 +2,12 @@
 Custom css
 author: cse.shahriar.hosen@gmail.com
 */
+img.logo-sm {
+    width: 80px;
+    height: 60px;
+}
+img.avatar-sm {
+    width: 40px;
+    height:40px;
+    border-radius: 50%;
+}
