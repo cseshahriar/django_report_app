@@ -43,6 +43,7 @@ def get_chart(chart_type, data, results_by, **kwargs):
     fig = plt.figure(figsize=(10,4))
     key = get_key(results_by)
     d = data.groupby(key, as_index=False)['total_price'].agg('sum')
+
     if chart_type == '#1':
         print('bar chart')
         sns.barplot(x=key, y='total_price', data=d)
@@ -54,6 +55,7 @@ def get_chart(chart_type, data, results_by, **kwargs):
         plt.plot(d[key], d['total_price'], color='green', marker='o', linestyle='dashed')
     else:
         print('ups... failed to identify the chart type')
+    
     plt.tight_layout()
     chart = get_graph()
     return chart
