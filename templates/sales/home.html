@@ -45,25 +45,29 @@ home
 <br>
 
 {% if sales_df %}
-    sales df
+    Sales DataFrame
     {{sales_df|safe}}
     <br>
 
-    positions df
+    Positions DataFrame
     {{positions_df|safe}}
     <br>
     
-    merged df
+    Merged DataFrame
     {{merged_df|safe}}
     <br>
     
-    grouped by df
+    Grouped by DataFrame
     {{df|safe}}
     <br>
+    
+    <!-- chart -->
     <img src="data:image/png;base64, {{chart|safe}}" id='img'>
+
 {% endif %}
 
 <br>
-<button class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>
+<button class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal"
+ data-bs-target="#reportModal">Add Report</button>
 
 {% endblock content %}

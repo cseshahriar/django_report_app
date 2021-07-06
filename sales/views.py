@@ -30,12 +30,16 @@ def home_view(request):
 
         sale_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
         if len(sale_qs) > 0:
+            # DataFrame for sales
             sales_df = pd.DataFrame(sale_qs.values())
-            sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id)
+            # dataframe data column manipulation
+            sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id) # get custormer_name insted of object
             sales_df['salesman_id'] = sales_df['salesman_id'].apply(get_salesman_from_id)
             sales_df['created'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m-%d'))
+            # column title change
             sales_df.rename({'customer_id': 'customer', 'salesman_id': 'salesman', 'id': 'sales_id'}, axis=1, inplace=True)
-
+            
+            # sale positions data
             positions_data = []
             for sale in sale_qs:
                 for pos in sale.get_positions():
@@ -47,16 +51,23 @@ def home_view(request):
                         'sales_id': pos.get_sales_id(),
                     }
                     positions_data.append(obj)
-
+            
+            # dataframe for positions
             positions_df = pd.DataFrame(positions_data)
-            merged_df = pd.merge(sales_df, positions_df, on='sales_id')
 
+            # merge sales_df and positions_df
+            merged_df = pd.merge(sales_df, positions_df, on='sales_id')
+            
+            # groupby transaction_id
             df = merged_df.groupby('transaction_id', as_index=False)['price'].agg('sum')
             
+            # chart
             chart = get_chart(chart_type, sales_df, results_by)
-            print('chart', chart)
-            sales_df = sales_df.to_html()
+
+            sales_df = sales_df.to_html() # make to html representation
             positions_df = positions_df.to_html()
+
+            # merge both dataframe and return single
             merged_df = merged_df.to_html()
             df = df.to_html()
 

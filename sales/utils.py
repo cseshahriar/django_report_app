@@ -20,6 +20,7 @@ def get_customer_from_id(val):
     return customer
 
 def get_graph():
+    """ generate the graph """
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
@@ -37,6 +38,7 @@ def get_key(res_by):
     return key
 
 def get_chart(chart_type, data, results_by, **kwargs):
+    """ generate the chart and return """
     plt.switch_backend('AGG')
     fig = plt.figure(figsize=(10,4))
     key = get_key(results_by)
