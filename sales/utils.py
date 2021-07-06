@@ -7,6 +7,7 @@ from customers.models import Customer
 from profiles.models import Profile
 
 def generate_code():
+    """12 characters unique code generate """
     code = str(uuid.uuid4()).replace('-', '').upper()[:12]
     return code
 

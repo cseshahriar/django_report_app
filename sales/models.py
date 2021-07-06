@@ -7,6 +7,9 @@ from customers.models import Customer
 from profiles.models import Profile
 from .utils import generate_code
 
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
+
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
@@ -31,7 +34,7 @@ class Position(models.Model):
 class Sale(models.Model):
     transaction_id = models.CharField(max_length=12, blank=True)
     positions = models.ManyToManyField(Position)
-    total_price = models.FloatField(blank=True, null=True)
+    total_price = models.FloatField(blank=True, null=True) # calculate_total by signals
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
     created = models.DateTimeField(blank=True)
@@ -45,7 +48,7 @@ class Sale(models.Model):
 
     def save(self, *args, **kwargs):
         if self.transaction_id == "":
-            self.transaction_id = generate_code()
+            self.transaction_id = generate_code() 
         if self.created is None:
             self.created = timezone.now()
         return super().save(*args, **kwargs)
@@ -61,3 +64,16 @@ class CSV(models.Model):
 
     def __str__(self):
         return str(self.file_name)
+
+
+@receiver(m2m_changed, sender=Sale.positions.through)
+def calculate_total_price(sender, instance, action, **kwargs):
+    print('action', action)
+
+    total_price = 0
+    if action == 'post_add' or action=='post_remove':
+        for item in instance.get_positions():
+            total_price += item.price
+    
+    instance.total_price = total_price
+    instance.save()
