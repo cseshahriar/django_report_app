@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('sales.urls', namespace='sales')),
     path('reports/', include('reports.urls', namespace='reports')),
-    #path('my_profile/', include('profiles.urls', namespace='profiles')),
+    path('my_profile/', include('profiles.urls', namespace='profiles')),
     #path('login/', login_view, name='login'),
     #path('logout/', logout_view, name='logout'),
 ]

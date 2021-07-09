@@ -33,6 +33,7 @@ class UploadTemplateView(LoginRequiredMixin, TemplateView):
 
 @login_required
 def csv_upload_view(request):
+    """ data import by csv with dropzone """
     print('file is being')
 
     if request.method == 'POST':
