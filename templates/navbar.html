@@ -32,7 +32,7 @@
         </div>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">Profile</a></li>
-          <li><a class="dropdown-item" href="">Logout</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
         </ul>
       </div>
     {% endif %}
