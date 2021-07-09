@@ -95,20 +95,21 @@ def create_report_view(request):
 
 @login_required
 def render_pdf_view(request, pk):
+    """ pdf render view """
     template_path = 'reports/pdf.html'
     obj = get_object_or_404(Report, pk=pk)
     context = {'obj': obj}
-
+    # create a django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-
+    # if display
     response['Content-Disposition'] = 'filename="report.pdf"'
-
+    # find the template and render
     template = get_template(template_path)
     html = template.render(context)
-
+    # create a pdf
     pisa_status = pisa.CreatePDF(
        html, dest=response)
-
+    # if errors then show some funy view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
